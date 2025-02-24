@@ -122,7 +122,6 @@ __functionize_test() {
   flow
 
   print_func 'DONE'
-  #  echo '__functionize_test DONE'
 }
 
 __utilifize

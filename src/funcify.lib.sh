@@ -79,7 +79,6 @@ ssh_funcify() {
   }
 
   perform() {
-
     # Execute and handle all error cases with detailed reporting
     ssh_response=$(_ssh) || {
       declare exit_code=$?
