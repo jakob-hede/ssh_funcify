@@ -14,7 +14,7 @@
 #   $* - args      : Arguments to pass to the remote function (optional)
 #
 # Exit Codes:
-#   64  - Input validation failures (missing address/function, undefined function)
+#   63  - Input validation failures (missing address/function, undefined function)
 #   255 - SSH connection failures (timeout, host unreachable, auth failures)
 #   127 - Remote shell unavailable
 #   *   - Original exit code from the remote function execution
@@ -46,13 +46,13 @@ ssh_funcify() {
     }
     # Validate inputs and construct properly escaped remote execution command
     [[ -n "${address}" ]] || {
-      fail 64 "ssh_funcify: missing address"
+      fail 63 "ssh_funcify: missing address"
     }
     [[ -n "${func_name}" ]] || {
-      fail 64 "ssh_funcify: missing function name"
+      fail 63 "ssh_funcify: missing function name"
     }
     func_txt=$(declare -f "${func_name}") || {
-      fail 64 "ssh_funcify: function ${func_name} not defined"
+      fail 63 "ssh_funcify: function ${func_name} not defined"
     }
 
     # Multi-stage escaping: function -> arguments -> remote command
