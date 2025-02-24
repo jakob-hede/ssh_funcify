@@ -15,8 +15,8 @@
 #
 # Exit Codes:
 #   63  - Input validation failures (missing address/function, undefined function)
-#   255 - SSH connection failures (timeout, host unreachable, auth failures)
 #   127 - Remote shell unavailable
+#   255 - SSH connection failures (timeout, host unreachable, auth failures)
 #   *   - Original exit code from the remote function execution
 #
 # Security Notes:
