@@ -15,5 +15,8 @@ There is also some convenient error handling and debug-logging.
 You will have to ponder `ssh_host='_localisolatee`'.
 
 
-# Usage
+## Usage
 Is illustrated in `ssh_funcify_test.sh`.
+
+## Boldness of attack
+Should you feel like blurting anything at all ... knock yourself out.
