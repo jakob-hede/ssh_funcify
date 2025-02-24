@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # ssh_funcify - Remote Function Execution Transport
+# version 2025.02.24.10:27
 #
 # Purpose:
 #   Transports and executes shell functions on remote hosts via SSH while maintaining:
