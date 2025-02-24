@@ -9,7 +9,11 @@ There is also some robustness against syntax errors cause by _plings_ and such i
 There is also some convenient error handling and debug-logging.
 
 ## Notes
+### fail-function
 `ssh_funcify` assumes access to a declared function `fail` which is declared for the test in `__utilifize` in `ssh_funcify_test.sh`.
+### ssh config
+You will have to ponder `ssh_host='_localisolatee`'.
+
 
 # Usage
 Is illustrated in `ssh_funcify_test.sh`.
