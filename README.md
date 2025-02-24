@@ -26,6 +26,9 @@ You will have to ponder `ssh_host='_localisolatee`'.
 
 Is illustrated in `ssh_funcify_test.sh`.
 
+## Grokage
+Understanding [Bash Dynamic Scope](https://benmyers.dev/blog/scope/) is prolly a good idea to follow variables.
+
 ## Boldness of attack
 
 Should you feel like blurting anything at all ... knock `yourself` out.
