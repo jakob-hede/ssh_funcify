@@ -1,0 +1,109 @@
+#!/bin/bash
+__utilifize() {
+  _print() {
+    echo -ne "$*" >&2
+  }
+
+  pransi() {
+    declare ansi="$1"
+    shift
+    while IFS= read -r l; do
+      _print "\033[${ansi}m${l}\033[0m\n"
+    done <<<"$@"
+  }
+
+  fail() {
+    declare -i exit_code="$1"
+    shift
+    pransi '91' "(${exit_code}) $*"
+    exit "${exit_code}"
+  }
+}
+
+__functionize_test() {
+  echo '__functionize_test BEGIN'
+  source 'funcify.lib.sh' || fail 1 'Could not load funcify.lib.sh'
+
+  func1() {
+    echo "ECHO FROM func1; $(whoami)@$(hostname); 'something plinged' ($*)"
+  }
+
+  func2() {
+    # Showcasing function with subfunction as a more complex example.
+    subfunc() {
+      echo "ECHO FROM subfunc(2); $(whoami)@$(hostname); 'pling' ($*)"
+    }
+
+    subfunc "$@"
+  }
+
+  func_failing() {
+    echo "ECHO FROM func_failing; $(whoami)@$(hostname); 'something plinged' ($*)"
+    return 65
+  }
+
+  flow() {
+    printf '\033[94m flow:\n\033[0m\n'
+    declare ssh_host func_name func_args
+
+    reset_args() {
+      ssh_host='_localisolatee'
+      func_name='func1'
+      func_args=('a1' 'a2')
+    }
+
+    responsify() {
+      printf '\033[34m responsify: \033[90m %s %s %s\033[0m\n' "${ssh_host}" "${func_name}" "${func_args[*]}"
+      declare response ansi
+      if response=$(ssh_funcify "${ssh_host}" "${func_name}" "${func_args[@]}"); then
+        ansi=32
+      else
+        [[ -n ${response} ]] || response='no response'
+        ansi=33
+      fi
+      printf '\033[35m response:\n\033[%sm %s\033[0m\n' "${ansi}" "${response}"
+    }
+
+    testify() {
+      printf '\033[94m\n testify %s:\033[0m\n' "$*" >&2
+      responsify
+    }
+
+    reset_args
+    testify 'good 1'
+    ##
+    reset_args
+    func_name='func2'
+    testify 'func2'
+    ##
+    reset_args
+    ssh_host=''
+    testify 'no-host'
+    ##
+    reset_args
+    func_name=''
+    testify 'no-func_name'
+    ##
+    reset_args
+    declare func_name='bad_func'
+    testify 'bad_func'
+    ##
+    reset_args
+    ssh_host='bad-host'
+    testify 'bad_host'
+    ##
+    reset_args
+    declare func_name='func_failing'
+    testify 'func_failing'
+    ##
+
+    echo
+  }
+
+  flow
+
+  echo '__functionize_test DONE'
+}
+
+__utilifize
+__functionize_test
