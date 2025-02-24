@@ -39,8 +39,8 @@ __utilifize() {
 
 __functionize_test() {
   print_func 'BEGIN'
-  source "$(dirname "${BASH_SOURCE[0]}")/funcify.lib.sh" ||
-    fail 1 'Could not load funcify.lib.sh'
+  source "$(dirname "${BASH_SOURCE[0]}")/ssh_funcify.lib.sh" ||
+    fail 1 'Could not load ssh_funcify.lib.sh'
 
   func1() {
     echo "ECHO FROM func1; $(whoami)@$(hostname); 'something plinged' ($*)"
