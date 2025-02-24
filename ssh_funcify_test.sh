@@ -1,41 +1,4 @@
 #!/bin/bash
-__utilifize() {
-  _print() {
-    # Prints pre-formatted text to stderr.
-    printf '%b' "$*" >&2
-  }
-
-  _printf() {
-    # Formats text and prints it to stderr.
-    # shellcheck disable=SC2059
-    printf "$@" >&2
-  }
-
-  pransi() {
-    declare ansi="$1"
-    shift
-    while IFS= read -r l; do
-      _print "\033[${ansi}m${l}\033[0m\n"
-    done <<<"$@"
-  }
-
-  fail() {
-    declare -i exit_code="$1"
-    shift
-    pransi '91' "(${exit_code}) $*"
-    exit "${exit_code}"
-  }
-
-  remark() {
-    pransi '35' "$@"
-  }
-
-  print_func() {
-    function_name="${FUNCNAME[1]}"
-    pransi '36' "${function_name}" "$@"
-  }
-
-}
 
 __functionize_test() {
   print_func 'BEGIN'
@@ -122,6 +85,44 @@ __functionize_test() {
   flow
 
   print_func 'DONE'
+}
+
+__utilifize() {
+  _print() {
+    # Prints pre-formatted text to stderr.
+    printf '%b' "$*" >&2
+  }
+
+  _printf() {
+    # Formats text and prints it to stderr.
+    # shellcheck disable=SC2059
+    printf "$@" >&2
+  }
+
+  pransi() {
+    declare ansi="$1"
+    shift
+    while IFS= read -r l; do
+      _print "\033[${ansi}m${l}\033[0m\n"
+    done <<<"$@"
+  }
+
+  fail() {
+    declare -i exit_code="$1"
+    shift
+    pransi '91' "(${exit_code}) $*"
+    exit "${exit_code}"
+  }
+
+  remark() {
+    pransi '35' "$@"
+  }
+
+  print_func() {
+    function_name="${FUNCNAME[1]}"
+    pransi '36' "${function_name}" "$@"
+  }
+
 }
 
 __utilifize
