@@ -20,3 +20,4 @@ Is illustrated in `ssh_funcify_test.sh`.
 
 ## Boldness of attack
 Should you feel like blurting anything at all ... knock `yourself` out.
+
