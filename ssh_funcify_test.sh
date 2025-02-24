@@ -126,4 +126,3 @@ __functionize_test() {
 
 __utilifize
 __functionize_test
-
