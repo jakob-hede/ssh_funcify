@@ -37,6 +37,7 @@ ssh_funcify() {
   shift
   declare -a args=("$@")
   declare func_txt escaped_func_txt escaped_args cmd remote_cmd ssh_response error_file
+  declare error_msg='undefined error message'
 
   prepare() {
     func_txt=$(declare -f 'fail') || {
@@ -68,18 +69,21 @@ ssh_funcify() {
     error_file="$(mktemp)"
   }
 
-  perform() {
+  errorquire_and_cleanup() {
     # Initialize error message and handle temporary error file cleanup
     # Ensures error_file is read and removed even if SSH command succeeds
-    declare error_msg='undefined error message'
     [[ -f "${error_file}" ]] && {
       error_msg=$(<"${error_file}")
       rm -f "${error_file}"
     }
+  }
+
+  perform() {
 
     # Execute and handle all error cases with detailed reporting
     ssh_response=$(_ssh) || {
       declare exit_code=$?
+      errorquire_and_cleanup
       # pransi '93' "[${exit_code}] ${ssh_response}"
 
       # Map exit codes to meaningful error messages
@@ -96,11 +100,11 @@ ssh_funcify() {
       esac
 
       [[ -n "${ssh_response}" ]] && echo "${ssh_response}"
-
       fail "${exit_code}" "ssh_funcify: ${error_msg}"
     }
 
     echo "${ssh_response}"
+    errorquire_and_cleanup
     return 0
   }
 

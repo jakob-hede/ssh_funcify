@@ -1,7 +1,14 @@
 #!/bin/bash
 __utilifize() {
   _print() {
-    echo -ne "$*" >&2
+    # Prints pre-formatted text to stderr.
+    printf '%b' "$*" >&2
+  }
+
+  _printf() {
+    # Formats text and prints it to stderr.
+    # shellcheck disable=SC2059
+    printf "$@" >&2
   }
 
   pransi() {
@@ -18,11 +25,22 @@ __utilifize() {
     pransi '91' "(${exit_code}) $*"
     exit "${exit_code}"
   }
+
+  remark() {
+    pransi '35' "$@"
+  }
+
+  print_func() {
+    function_name="${FUNCNAME[1]}"
+    pransi '36' "${function_name}" "$@"
+  }
+
 }
 
 __functionize_test() {
-  echo '__functionize_test BEGIN'
-  source 'funcify.lib.sh' || fail 1 'Could not load funcify.lib.sh'
+  print_func 'BEGIN'
+  source "$(dirname "${BASH_SOURCE[0]}")/funcify.lib.sh" ||
+    fail 1 'Could not load funcify.lib.sh'
 
   func1() {
     echo "ECHO FROM func1; $(whoami)@$(hostname); 'something plinged' ($*)"
@@ -43,7 +61,6 @@ __functionize_test() {
   }
 
   flow() {
-    printf '\033[94m flow:\n\033[0m\n'
     declare ssh_host func_name func_args
 
     reset_args() {
@@ -53,7 +70,8 @@ __functionize_test() {
     }
 
     responsify() {
-      printf '\033[34m responsify: \033[90m %s %s %s\033[0m\n' "${ssh_host}" "${func_name}" "${func_args[*]}"
+      _printf '\033[34m responsify: \033[90m %s %s %s\033[0m\n' \
+        "${ssh_host}" "${func_name}" "${func_args[*]}"
       declare response ansi
       if response=$(ssh_funcify "${ssh_host}" "${func_name}" "${func_args[@]}"); then
         ansi=32
@@ -61,11 +79,12 @@ __functionize_test() {
         [[ -n ${response} ]] || response='no response'
         ansi=33
       fi
-      printf '\033[35m response:\n\033[%sm %s\033[0m\n' "${ansi}" "${response}"
+      _printf '\033[35m response:\n\033[%sm %s\033[0m\n' \
+        "${ansi}" "${response}"
     }
 
     testify() {
-      printf '\033[94m\n testify %s:\033[0m\n' "$*" >&2
+      _printf '\033[94m\n testify %s:\033[0m\n' "$*"
       responsify
     }
 
@@ -102,7 +121,8 @@ __functionize_test() {
 
   flow
 
-  echo '__functionize_test DONE'
+  print_func 'DONE'
+  #  echo '__functionize_test DONE'
 }
 
 __utilifize
